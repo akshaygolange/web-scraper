@@ -1,5 +1,6 @@
 import Product from "../models/product.model.js";
 import { scrapeProductDetails } from "../scrapers/productDetails.scraper.js";
+import { createBrowser } from "../scrapers/browser.js";
 
 export const scrapeSingleProduct = async (slug) => {
   const product = await Product.findOne({ slug });
@@ -8,9 +9,16 @@ export const scrapeSingleProduct = async (slug) => {
     throw new Error("Product not found");
   }
 
-  await scrapeProductDetails(product.sourceUrl);
+  const browser = await createBrowser();
+  const page = await browser.newPage();
 
-  return product;
+  try {
+    await scrapeProductDetails(page, product.sourceUrl);
+
+    return product;
+  } finally {
+    await browser.close();
+  }
 };
 
 export const scrapeAllProducts = async () => {
@@ -18,29 +26,36 @@ export const scrapeAllProducts = async () => {
 
   console.log(`Total products: ${products.length}`);
 
+  const browser = await createBrowser();
+  const page = await browser.newPage();
+
   const results = [];
 
-  for (const product of products) {
-    try {
-      console.log(`Scraping: ${product.title}`);
+  try {
+    for (const product of products) {
+      try {
+        console.log(`Scraping: ${product.title}`);
 
-      await scrapeProductDetails(product.sourceUrl);
+        await scrapeProductDetails(page, product.sourceUrl);
 
-      results.push({
-        title: product.title,
-        success: true,
-      });
-    } catch (error) {
-      console.log(`Failed: ${product.title}`);
-      console.log(error.message);
+        results.push({
+          title: product.title,
+          success: true,
+        });
+      } catch (error) {
+        console.log(`Failed: ${product.title}`);
+        console.log(error.message);
 
-      results.push({
-        title: product.title,
-        success: false,
-        error: error.message,
-      });
+        results.push({
+          title: product.title,
+          success: false,
+          error: error.message,
+        });
+      }
     }
-  }
 
-  return results;
+    return results;
+  } finally {
+    await browser.close();
+  }
 };

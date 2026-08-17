@@ -1,12 +1,8 @@
 import { chromium } from "playwright";
 
 import { updateProductDetails } from "../services/productDetails.service.js";
-export const scrapeProductDetails = async (url) => {
-  const browser = await chromium.launch({
-    headless: false,
-  });
+export const scrapeProductDetails = async (page,url) => {
 
-  const page = await browser.newPage();
 
   await page.goto(url, {
     waitUntil: "domcontentloaded",
@@ -47,5 +43,4 @@ export const scrapeProductDetails = async (url) => {
 
   
 
-  await browser.close();
 };
