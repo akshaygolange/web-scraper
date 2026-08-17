@@ -40,12 +40,12 @@ router.get("/check", async (req, res) => {
 
 router.post("/scrape-all", async (req, res) => {
   try {
-    const results = await scrapeAllProducts();
+    const summary = await scrapeAllProducts();
 
     res.json({
       success: true,
       message: "Scraping completed",
-      results,
+      data: summary,
     });
   } catch (error) {
     res.status(500).json({

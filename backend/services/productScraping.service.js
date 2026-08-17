@@ -54,7 +54,20 @@ export const scrapeAllProducts = async () => {
       }
     }
 
-    return results;
+    const successful = results.filter(
+      (result) => result.success
+    ).length;
+
+    const failed = results.filter(
+      (result) => !result.success
+    ).length;
+
+    return {
+      total: products.length,
+      successful,
+      failed,
+      results,
+    };
   } finally {
     await browser.close();
   }
