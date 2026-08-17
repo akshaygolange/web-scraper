@@ -10,6 +10,7 @@ export const scrapeProductDetails = async (url) => {
 
   await page.goto(url, {
     waitUntil: "domcontentloaded",
+      timeout: 60000,
   });
 
   const heading = await page.locator("h1").textContent();

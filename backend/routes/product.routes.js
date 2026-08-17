@@ -1,6 +1,6 @@
 import express from "express";
 import Product from "../models/product.model.js";
-import { scrapeSingleProduct } from "../services/productScraping.service.js";
+import { scrapeSingleProduct , scrapeAllProducts, } from "../services/productScraping.service.js";
 
 console.log("product.routes.js loaded");
 
@@ -38,7 +38,22 @@ router.get("/check", async (req, res) => {
   res.json(product);
 });
 
+router.post("/scrape-all", async (req, res) => {
+  try {
+    const results = await scrapeAllProducts();
 
+    res.json({
+      success: true,
+      message: "Scraping completed",
+      results,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
 
 // Get product by slug
 router.get("/:slug", async (req, res) => {
@@ -82,5 +97,7 @@ router.post("/:slug/scrape", async (req, res) => {
     });
   }
 });
+
+
 
 export default router;
