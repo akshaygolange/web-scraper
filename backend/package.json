@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
  "scripts": {
-  "build": "npx playwright install chromium",
+  "build": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright install chromium",
   "dev": "nodemon server.js",
   "start": "node server.js",
   "seed": "nodemon seed/navigation.seed",
