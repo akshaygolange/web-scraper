@@ -154,22 +154,25 @@ router.get("/check", async (req, res) => {
   res.json(product);
 });
 
-router.post("/scrape-all", async (req, res) => {
-  try {
-    const summary = await scrapeAllProducts();
 
-    res.json({
-      success: true,
-      message: "Scraping completed",
-      data: summary,
+router.post("/scrape-all", (req, res) => {
+  // Start scraping in the background
+  scrapeAllProducts()
+    .then((summary) => {
+      console.log("All products scraped:", summary);
+    })
+    .catch((error) => {
+      console.error("Scrape all failed:", error.message);
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+
+  // Respond immediately
+  res.json({
+    success: true,
+    message: "Scraping started",
+  });
 });
+
+
 
 // Get product by slug
 router.get("/:slug", async (req, res) => {
