@@ -1,4 +1,3 @@
-import { chromium } from "playwright";
 
 import { updateProductDetails } from "../services/productDetails.service.js";
 export const scrapeProductDetails = async (page,url) => {
