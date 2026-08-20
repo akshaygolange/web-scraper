@@ -2,15 +2,13 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
-  "scripts": {
-      "build": "npm install && npx playwright install chromium"
-
-   ,
-   "dev":"nodemon server.js",
-    "start": "node server.js"
-    ,"seed": "nodemon seed/navigation.seed",
-    "test": "node test.js"
-  },
+ "scripts": {
+  "build": "npx playwright install chromium",
+  "dev": "nodemon server.js",
+  "start": "node server.js",
+  "seed": "nodemon seed/navigation.seed",
+  "test": "node test.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
